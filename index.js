@@ -2,6 +2,7 @@
 import 'dotenv/config';
 
 import express from 'express';
+ 
 
 // on importe le router
 import router from './app/router.js';
@@ -11,8 +12,21 @@ const PORT = process.env.PORT || 3000;
 
 const app = express();
 
+import session from 'express-session';
+app.use(session({
+  resave: true,
+  saveUninitialized: true,
+  secret: "Guess it!",
+  cookie: {
+    secure: false,
+  }
+}));
+
+app.set("view engine", "ejs");
+app.set("views", "app/views");
+
 // servir les fichiers statiques qui sont dans "integration"
-app.use(express.static('integration'));
+app.use(express.static('public'));
 
 // routage !
 app.use(router);

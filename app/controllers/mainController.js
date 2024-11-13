@@ -1,21 +1,33 @@
-import path from 'node:path';
+//import path from 'node:path';
+import figurineDataMapper from '../figurineDataMapper.js';
 
 const mainController = {
 
-  // méthode pour la page d'accueil
-  homePage(request, response) {
-    // Remplacer le response.sendFile par le rendu d'un fichier EJS
-    response.sendFile('accueil.html', {
-      root: path.join(import.meta.dirname, '../../integration'),
-    });
+  async homePage(request, response, next) {
+
+        try{
+          const figurines = await figurineDataMapper.getAllFigurines();
+          response.render('accueil', {figurines});  
+        }
+        catch(error){
+          console.error(error);
+          response.status(500).send('Server Error');    
+        }
   },
 
-  // méthode pour la page article
-  articlePage(request, response) {
-    // Remplacer le response.sendFile par le rendu d'un fichier EJS
-    response.sendFile('article.html', {
-      root: path.join(import.meta.dirname, '../../integration'),
-    });
+  async articlePage(request, response, next) {
+
+    try{
+      const figurineId = parseInt(request.params.id, 10);
+      const oneFigurine = await figurineDataMapper.getOneFigurine(figurineId);
+
+      response.render('article', {oneFigurine});  
+    }
+    catch(error){
+      console.error(error);
+      response.status(500).send('Server Error');    
+    }
+
   }
 };
 
