@@ -35,7 +35,29 @@ const bookmarksController = {
     response.redirect('/bookmarks');
   },
 
-  
+  async bookmarksDelete(request, response) {
+
+    try{
+
+      const figurineId = parseInt(request.params.id, 10);
+
+      const isFigurineInList = request.session.bookmarks.some(figurine => figurine.id === figurineId); 
+
+      if(isFigurineInList){
+        const figurine = await figurineDataMapper.getOneFigurine(figurineId); 
+        const figurineToDelete = request.session.bookmarks.filter(figurine);
+        console.log(figurineToDelete);
+      };
+
+
+    }
+    catch(error){
+      console.error(error);
+      return response.status(500).send('Server Error');    
+    }
+
+    response.redirect('/bookmarks');
+  },
 
 };
 

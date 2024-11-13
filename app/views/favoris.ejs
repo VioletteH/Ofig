@@ -13,10 +13,11 @@
               <th></th>
             </thead>
             <tbody>
+              
               <tr>
-                <% for (const bookmark in bookmarks) { %>
+                <% for (const bookmark of bookmarks) { %>
                 <td>
-                  <img class="img-thumbnail img-cart-list" src="./images/<%= bookmark.name.toLowerCase() %>.png" alt="">
+                  <img class="img-thumbnail img-cart-list" src="./images/<%= bookmark.name %>.png" alt="">
                   <div class="item-description">
                       <h5 class="item-title"><%= bookmark.name %></h5>
                   </div>
@@ -31,7 +32,7 @@
                 </td>
                 <% } %>
               </tr>
-
+              
           </table>
 
           <div class="row">
