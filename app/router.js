@@ -16,5 +16,6 @@ router.get('/article/:id', mainController.articlePage);
 router.get('/bookmarks', bookmarksController.bookmarksPage);
 router.get('/bookmarks/add/:id', bookmarksController.bookmarksAdd);
 router.get('/bookmarks/delete/:id', bookmarksController.bookmarksDelete);
+
 // on exporte le router 
 export default router;
