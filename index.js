@@ -1,17 +1,19 @@
 import 'dotenv/config';
 import express from 'express';
+import session from 'express-session';
 import router from './app/router.js';
 
 const PORT = process.env.PORT || 3000;
 const app = express();
 
-import session from 'express-session';
+
 app.use(session({
   resave: true,
   saveUninitialized: true,
-  secret: "Guess it!",
+  secret: process.env.SESSION_SECRET, // NEW
   cookie: {
     secure: false,
+    maxAge: (365 * 24 * 1000 * 60 * 60) // ça fait un an
   }
 }));
 

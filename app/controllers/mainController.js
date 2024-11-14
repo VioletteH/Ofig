@@ -7,7 +7,6 @@ const mainController = {
 
         try{
           const figurines = await figurineDataMapper.getAllFigurines();
-          //const figurineCategory = await figurineDataMapper.getCategory();
           response.render('accueil', {figurines});  
         }
         catch(error){
@@ -23,8 +22,7 @@ const mainController = {
       const oneFigurine = await figurineDataMapper.getOneFigurine(figurineId);
 
       const reviews = await figurineDataMapper.getAllReviews(figurineId);
-
-      //const figurineCategory = await figurineDataMapper.getCategory();
+      
       response.render('article', {oneFigurine, reviews});  
     }
     catch(error){
@@ -34,6 +32,19 @@ const mainController = {
 
   },
 
+  async categoryPage(request, response, next) {
+
+    try{
+      const categoryUrl = request.params.category;
+      const figurineCategory = await figurineDataMapper.getCategory(categoryUrl);
+      response.render('category', {figurineCategory});  
+    }
+    catch(error){
+      console.error(error);
+      response.status(500).send('Server Error');    
+    }
+
+  },
 
 };
 

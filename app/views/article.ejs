@@ -4,12 +4,8 @@
 
     <div class="row">
 
-        <div class="col-lg-3">
-
-            <h1 class="my-4">O'Fig</h1>
-            <%- include ('partials/leftMenu') %>
+      <%- include ('partials/leftMenu') %>
     
-        </div>
       <!-- /.col-lg-3 -->
 
       <div class="col-lg-9">
@@ -25,7 +21,7 @@
               <div class="card-body">
                   <h3 class="card-title">
                     <%= oneFigurine.name %>
-                    <div class="badge badge-pill badge-gentil"><%= oneFigurine.category %></div>
+                    <div class="badge badge-pill badge-<%= oneFigurine.category.toLowerCase() %>"><%= oneFigurine.category %></div>
                   </h3>
                   <p class="card-text">Taille réelle : <%= oneFigurine.size %>cm</p>
                   <p class="card-text"><%= oneFigurine.description %></p>

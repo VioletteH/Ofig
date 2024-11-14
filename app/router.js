@@ -1,6 +1,4 @@
 import express from 'express';
-
-// on importe nos controllers
 import mainController from './controllers/mainController.js';
 import bookmarksController from './controllers/bookmarksController.js';
 
@@ -16,6 +14,9 @@ router.get('/article/:id', mainController.articlePage);
 router.get('/bookmarks', bookmarksController.bookmarksPage);
 router.get('/bookmarks/add/:id', bookmarksController.bookmarksAdd);
 router.get('/bookmarks/delete/:id', bookmarksController.bookmarksDelete);
+
+// page category
+router.get('/category/:category', mainController.categoryPage);
 
 // on exporte le router 
 export default router;

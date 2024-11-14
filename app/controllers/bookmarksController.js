@@ -3,7 +3,7 @@ import figurineDataMapper from '../figurineDataMapper.js';
 
 const bookmarksController = {
 
-  async bookmarksPage(request, response) {
+  bookmarksPage(request, response) {
     // request.session.bookmarks = request.session.bookmarks ?? [];
 
     if (!request.session.bookmarks) {
@@ -49,6 +49,9 @@ const bookmarksController = {
       if (!request.session.bookmarks) {
         request.session.bookmarks = [];
       }
+
+      // correction
+      // request.session.bookmarks = request.session.bookmarks.filter(figurine => figurine.id !== figurineToDeleteId);
 
       const isFigurineInList = request.session.bookmarks.some(figurine => figurine.id === figurineId);
 
