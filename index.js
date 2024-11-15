@@ -6,6 +6,7 @@ import router from './app/router.js';
 const PORT = process.env.PORT || 3000;
 const app = express();
 
+app.locals.year = 2024;
 
 app.use(session({
   resave: true,

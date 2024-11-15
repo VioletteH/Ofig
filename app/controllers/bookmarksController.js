@@ -1,4 +1,3 @@
-//import path from 'node:path';
 import figurineDataMapper from '../figurineDataMapper.js';
 
 const bookmarksController = {
@@ -23,6 +22,7 @@ const bookmarksController = {
         request.session.bookmarks = [];
       };
 
+      // MA VERSION
       const isFigurineInList = request.session.bookmarks.some(figurine => figurine.id === figurineId);
 
       if (!isFigurineInList) {
@@ -31,14 +31,23 @@ const bookmarksController = {
         console.log(request.session.bookmarks);
       };
 
+      // VERSION CORRIGEE
+      // const figurineToAdd = await figurineDataMapper.getOneFigurine(figurineToAddId);
+      // if (!figurineToAdd){
+      //   next();
+      //   return;
+      // }
+      // const IShouldAddTheFigurine = !bookmarks.some(figurine => figurine.id === figurineToAddId);
+      // if (IShouldAddTheFigurine){
+      //   bookmarks.push(figurineToAdd);
+      // }      
 
+      response.redirect('/bookmarks');
     }
     catch (error) {
       console.error(error);
       return response.status(500).send('Server Error');
     }
-
-    response.redirect('/bookmarks');
   },
 
   async bookmarksDelete(request, response) {
@@ -50,8 +59,7 @@ const bookmarksController = {
         request.session.bookmarks = [];
       }
 
-      // correction
-      // request.session.bookmarks = request.session.bookmarks.filter(figurine => figurine.id !== figurineToDeleteId);
+      // MA VERSION
 
       const isFigurineInList = request.session.bookmarks.some(figurine => figurine.id === figurineId);
 
@@ -61,6 +69,10 @@ const bookmarksController = {
         request.session.bookmarks.splice(figurineBookmarkIndex, 1);
       };
 
+      // VERSION CORRIGEE
+      // request.session.bookmarks = request.session.bookmarks.filter(figurine => figurine.id !== figurineToDeleteId);
+      
+      response.redirect('/bookmarks');
 
     }
     catch (error) {
@@ -68,7 +80,6 @@ const bookmarksController = {
       return response.status(500).send('Server Error');
     }
 
-    response.redirect('/bookmarks');
   },
 
 };

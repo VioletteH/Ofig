@@ -3,7 +3,7 @@ import figurineDataMapper from '../figurineDataMapper.js';
 
 const mainController = {
 
-  async homePage(request, response, next) {
+  async homePage(request, response) {
 
         try{
           const figurines = await figurineDataMapper.getAllFigurines();
@@ -15,14 +15,12 @@ const mainController = {
         }
   },
 
-  async articlePage(request, response, next) {
+  async articlePage(request, response) {
 
     try{
       const figurineId = parseInt(request.params.id, 10);
       const oneFigurine = await figurineDataMapper.getOneFigurine(figurineId);
-
       const reviews = await figurineDataMapper.getAllReviews(figurineId);
-      
       response.render('article', {oneFigurine, reviews});  
     }
     catch(error){
@@ -36,8 +34,14 @@ const mainController = {
 
     try{
       const categoryUrl = request.params.category;
-      const figurineCategory = await figurineDataMapper.getCategory(categoryUrl);
-      response.render('category', {figurineCategory});  
+      const figurines = await figurineDataMapper.getCategory(categoryUrl);
+
+      if (figurines.length === 0){
+        next();
+        return;
+      }
+
+      response.render('accueil', {figurines});  
     }
     catch(error){
       console.error(error);

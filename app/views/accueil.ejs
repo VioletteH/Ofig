@@ -30,7 +30,7 @@
               </div>
               
               <div class="card-footer">
-                <small class="text-muted">&#9733; &#9733; &#9733; &#9733; &#9734;</small>
+                <small class="text-muted"><%- '&#9733;'.repeat(Math.round(figurine.note)) %><%- '&#9734;'.repeat(5 - Math.round(figurine.note)) %></small>
                 <a href="/bookmarks/add/<%= figurine.id %>" class="link-add-bookmarks">+ Ajouter aux favoris</a>
                 
               </div>

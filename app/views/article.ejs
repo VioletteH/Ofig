@@ -25,8 +25,8 @@
                   </h3>
                   <p class="card-text">Taille réelle : <%= oneFigurine.size %>cm</p>
                   <p class="card-text"><%= oneFigurine.description %></p>
-                  <p class="card-text">3
-                    Note moyenne : &#9733; &#9733; &#9733; &#9733; &#9734;
+                  <p class="card-text"><%= reviews.length %>
+                    Note moyenne : <%- '&#9733;'.repeat(Math.round(oneFigurine.note)) %><%- '&#9734;'.repeat(5 - Math.round(oneFigurine.note)) %>
                     <br>
                     <a href="#" data-toggle="modal" data-target="#reviewsModal">Détails des avis</a>
                   </p>
@@ -64,7 +64,7 @@
         <div class="modal-body">
           <% for (let review of reviews){ %>
           <section>
-            <h5><%= review.title %> &nbsp; <small class="text-muted">&#9733; &#9733; &#9733; &#9733; &#9734;</small></h5>
+            <h5><%= review.title %> &nbsp; <small class="text-muted"><%- '&#9733;'.repeat(Math.round(review.note)) %><%- '&#9734;'.repeat(5 - Math.round(review.note)) %></small></h5>
             <p class="review-author">par <%= review.author %></p>
             <p><%= review.message %></p>
           </section>
