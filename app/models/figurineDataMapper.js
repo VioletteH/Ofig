@@ -32,13 +32,21 @@ const figurineDataMapper = {
             FROM figurine LEFT JOIN review ON (review.figurine_id = figurine.id)
             WHERE category = $1
             GROUP BY figurine.id;`, [figurineCategory]);
-        // const result = await client.query(`SELECT * FROM "figurine" WHERE LOWER(category) = $1;`, [figurineCategory]);
         return result.rows; 
     },
 
     async countCategory(){
         const result = await client.query('SELECT category, COUNT(*) as count FROM figurine GROUP BY category;');
         return result.rows; 
+    },
+
+    async search(name){
+        const result = await client.query(`
+            SELECT figurine.*, AVG(note) as note  
+            FROM figurine LEFT JOIN review ON (review.figurine_id = figurine.id)
+            WHERE figurine.name ILIKE $1
+            GROUP BY figurine.id;`, [`%${name}%`]);
+        return result.rows[0]; 
     }
 };
 

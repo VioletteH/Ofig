@@ -11,10 +11,10 @@ app.locals.year = 2024;
 app.use(session({
   resave: true,
   saveUninitialized: true,
-  secret: process.env.SESSION_SECRET, // NEW
+  secret: process.env.SESSION_SECRET, 
   cookie: {
     secure: false,
-    maxAge: (365 * 24 * 1000 * 60 * 60) // ça fait un an
+    maxAge: (365 * 24 * 1000 * 60 * 60) 
   }
 }));
 

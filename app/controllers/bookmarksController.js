@@ -1,27 +1,20 @@
-import figurineDataMapper from '../figurineDataMapper.js';
+import figurineDataMapper from '../models/figurineDataMapper.js';
 
 const bookmarksController = {
 
   bookmarksPage(request, response) {
-    // request.session.bookmarks = request.session.bookmarks ?? [];
-
     if (!request.session.bookmarks) {
       request.session.bookmarks = [];
     };
-
     response.render('favoris', { bookmarks: request.session.bookmarks });
   },
 
   async bookmarksAdd(request, response) {
-
     try {
-
       const figurineId = parseInt(request.params.id, 10);
-
       if (!request.session.bookmarks) {
         request.session.bookmarks = [];
       };
-
       // MA VERSION
       const isFigurineInList = request.session.bookmarks.some(figurine => figurine.id === figurineId);
 
@@ -51,10 +44,8 @@ const bookmarksController = {
   },
 
   async bookmarksDelete(request, response) {
-    
     try {
       const figurineId = parseInt(request.params.id, 10);
-      
       if (!request.session.bookmarks) {
         request.session.bookmarks = [];
       }
@@ -79,10 +70,8 @@ const bookmarksController = {
       console.error(error);
       return response.status(500).send('Server Error');
     }
-
   },
 
 };
-
 
 export default bookmarksController;

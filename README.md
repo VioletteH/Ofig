@@ -1,180 +1,42 @@
 # O'Fig
 
-## Étape 1: Mise en place
+Matériel donné : une BDD create_db.sql et une integration statique
 
-Utiliser npm pour:
-- Initialiser le projet.
-- Préciser dans le fichier `package.json` qu'on est en type `module` (ECMAScript Module).
-- Installer les dépendances nécessaires : `express`, `ejs`, `pg`, et `dotenv`.
+Ce qui a été réalisé sur ce projet :
 
-Une base de code express _fonctionnelle_ est fournie, ainsi qu'une intégration _qui claque_. Prendre le temps de lire ce code.
+## Mise en place du projet
 
-## Étape 2: Factorisation des views
+- créer l'architecture du projet avec Express et EJS
+- utiliser le module dotenv et un fichier .env
+- créer des partials pour le header, le footer et le menu de gauche
 
-<details>
-<summary>Besoin d'aide ?</summary>
+## Base de données
 
-- Créer un dossier `views` dans le dossier `app`, y copier les fichiers html fournis en les renommant en `.ejs`.
-- Faire les réglages de express pour utiliser EJS et le bon dossier de views.
-- Créer les fichiers `header.ejs`, `footer.ejs` et `leftMenu.ejs` (pour le menu qui se trouve sur la gauche), y mettre le code HTML factorisable, et inclure ces fichiers dans les autres views.
-- Modifier les méthodes des controllers pour utiliser les views ejs.
+- créer un utilisateur et une BDD dans PostgresSQL et importer les données fournies
+- créer un fichier database et datamapper pour récuperer les figurines, les avis et les catégories avec utilisation des jointures
 
-</details>
+## Dynamisation
 
-## Étape 3: Brancher la Base de Données
+- créer des fonctions de controller pour envoyer les données du data mapper aux vues
+- utiliser try / catch pour la gestion d'erreur
+- dynamiser les différentes vues avec EJS
 
-Les données sont fournies dans un fichier `create_db.sql`, à importer dans une base de données PostGreSQL. 
+## Session
 
-Créer un nouvel utilisateur et une nouvelle base de données dans PostGreSQL, puis y importer les données du fichier. [Cette fiche récap](https://kourou.oclock.io/ressources/objectifs/creer-une-nouvelle-base-de-donnee-sur-postgresql/) peut être utile :wink:.
+- mettre en place un mécanisme de session
+- permettre à l'utilisateur d'ajouter ou de supprimer des figurines en favoris en fonction de sa session
 
-Créer un fichier `.env`, pour y mettre les informations de connexion à la base de données.
+## Catégories
 
-Créer ensuite un fichier `dataMapper/figurine.js` dans le dossier `app`.
+- créer un middleware en fonction des routes pour afficher le menu de gauche
+- filtrer les figurines en fonction de leur catégories
 
-Dans ce fichier, copier ce code :
+## Reviews
 
-```javascript
-import client from './../database.js';
+- afficher une pop up avec les reviews en fonction des figurines
+- calculer et afficher la note moyenne des reviews pour chaque figurine
 
-const figurineDataMapper = {
+## Moteur de recherche
 
-
-};
-
-export default figurineDataMapper;
-```
-
-Puis ajouter et implémenter les méthodes suivantes dans l'objet dataMapper:
-
-- `getAllFigurines()` qui va chercher toutes les figurines dans la table `figurine`.
-- `getOneFigurine(id)` qui va chercher une seule figurine dans la table `figurine`.
-
-Toutes ces méthodes renverrons un tableaux d'objets contenant les infos des figurines, un objet figurine ou null.
-Toutes ses méthodes seront asynchrone (`async`).
-
-## Étape 4: Dynamisation !
-
-### 4.1: Accueil
-
-Modifier la méthode `homePage` de l'objet `mainController`. Cette méthode doit : 
-- Appeller `figurineDataMapper.getAllFigurines` pour récupérer toutes les figurines.
-- Envoyer à la vue la liste des figurines.
-
-Modifier la view `accueil` pour utiliser les données qui viennent de la base de données !
-
-Ne pas se soucier du menu de gauche pour l'instant !
-
-Ne pas hésiter à modifier ou étendre le fichier CSS pour des manipulations plus facile (par exemple pour les noms des catégories).
-
-<details>
-<summary>Un peu d'aide pour utiliser le dataMapper ?</summary>
-
-- Ne pas oublié `await` devant le `client.query` ET la méthode du dataMapper `figurineDataMapper.getAllFigurines()`.
-- Pour gérer l'erreur, entourer l'appel du dataMapper et l'appel du `render()` par un bloc `try/catch`.
-- et c'est tout :wink:.
-
-</details>
-
-### 4.2: Article
-
-- Changer la route `/article` pour qu'elle attende un paramètre.
-- Modifier la méthode `articlePage` de l'objet `mainController` sur le même principe que précédemment, en utilisant le paramètre situé dans la requête.
-- Mettre à jour la view `article` pour utiliser les données de la BDD.
-- Mettre à jour la view `accueil` pour que les liens pointent vers la bonne page article.
-
-## Étape 5 : Les favoris
-
-On va gérer la liste des figurines favorites avec une session.
-
-### 5.1: Mise en place
-
-- Ajouter le package `express-session`. Un petit tour sur [la doc](https://www.npmjs.com/package/express-session), ça peut pas faire de mal.
-- Mettre en place le middleware dans `index.js`
-
-<details>
-<summary>Au secours !</summary>
-
-```js
-import session from 'express-session';
-app.use(session({
-  resave: true,
-  saveUninitialized: true,
-  secret: "Guess it!",
-  cookie: {
-    secure: false,
-    maxAge: (1000*60*60) // ça fait une heure
-  }
-}));
-```
-
-</details>
-
-### 5.2: Ajouter une figurine
-
-Implémenter une nouvelle route `/bookmarks/add/:id`, qui ajoute la figurine correspondante (cf paramètre `id`) dans la session. Cette route redirige ensuite vers `/bookmarks`, et tous les boutons "Ajouter aux favoris" doivent pointer sur cette route.
-
-<details>
-<summary>De l'aide !?</summary>
-
-- Qui dit "créer une nouvelle route", dit "créer une nouvelle méthode" !
-- Dans cette nouvelle méthode:
-    - Si la liste n'existe pas, il faut la créer ! (`req.session.bookmarks = []`)
-    - Puis tester si la figurine est déjà dans la liste.
-    - Si la figurine n'est pas dans la lise, récupérer la figurine dans la base de données avec `figurineDataMapper.getOneFigurine`.
-    - Puis ajouter la figurine à la liste (`req.session.bookmarks.push(figurine)`)
-    - Si la figurine est déjà dans la liste, il n'y a rien à faire !
-    - Dans tous les cas, rediriger vers la route `/bookmarks`, grâce à la méthode `res.redirect`
-
-</details>
-
-### 5.3: Afficher la liste des favoris
-
-Modifier la méthode `bookmarksPage` pour qu'elle utilise les données de la session. 
-
-### 5.4: Supprimer une figurine
-
-Implémenter une nouvelle route `/bookmarks/delete/:id`, qui supprime la figurine correspondante dans la session. Les liens `Enlever de la liste` dans la page "favoris" doivent pointer vers cette route !
-
-<details>
-<summary>Un peu d'aide</summary>
-
-- Nouvelle route, nouvelle méthode !
-- Dans cette méthode : 
-    - Enlever la figurine de la liste (avec `req.session.bookmarks.filter(...)` ).
-    - Et rediriger vers la route `/bookmarks`
-
-</details>
-
-## Bonus 1 : Les reviews
-
-Tiens ? y'a une autre table dans la bdd !?
-
-Elle contient des reviews sur les figurines. Ces reviews doivent être intégrés dans la page article, dans la modale prévue à cet effet.
-
-<details>
-<summary>Un peu d'aide ?</summary>
-
-Non. C'est un bonus, alors pas d'aide ! :wink:
-</details>
-
-## Bonus 2 : Les catégories
-
-### 1ère partie, les badges du menu de gauche
-
-Allez, go.
-
-<details>
-<summary>Des indices ?</summary>
-
-- Écrire une requête dans dataMapper pour récupérer _le nombre de figurines_ de chaque catégorie.
-- Appeler cette requête dans toutes les pages ou on en a besoin !
-
-</details>
-
-### 2ème partie, les liens du menu de gauche
-
-Chaque lien doit envoyer vers une page qui ne liste que les figurines de la catégorie cliquée. Tout est dit !
-
-## Bonus DE LA MORT : Les notes
-
-Trouver un moyen de calculer et d'afficher la note globale de chaque figurine à partir des notes des reviews associés.
+- créer un moteur de recherche interne dans le menu
+- créer la route et les fonctions dans le data mapper et le controller

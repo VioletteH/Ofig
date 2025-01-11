@@ -1,5 +1,5 @@
 <%- include ('partials/header') %>
-  <!-- Page Content -->
+
   <div class="container container-main">
 
     <div class="row">
@@ -13,7 +13,6 @@
             <th></th>
           </thead>
           <tbody>
-
             <% for (let bookmark of bookmarks) { %>
               <tr>
                 <td>
@@ -24,18 +23,15 @@
                     </h5>
                   </div>
                 </td>
-
                 <td>
                   <p class="item-subtotal">$<%= bookmark.price %>
                   </p>
                 </td>
-
                 <td>
                   <a href="/bookmarks/delete/<%= bookmark.id %>">Enlever de la liste</a>
                 </td>
               </tr>
             <% } %>
-
         </table>
 
         <div class="row">

@@ -41,7 +41,6 @@ body {
 
 .container-main {
   min-height: calc(100vh - 185px);
-  /* pourquoi 185px : 65 de margin-top du body, + 120 de hauteur du footer */
 }
 
 .badge-category {
@@ -93,15 +92,12 @@ table.table tbody tr td {
   font-weight: bolder;
 }
 
-
 .review-author {
   font-size: 0.8em;
   font-style: italic;
   margin-left: 15px;
 }
 
-
-/* Modal breakpoint is awful in bootstrap */
 @media (min-width: 576px) {
   .modal-dialog {
     width: 80%;

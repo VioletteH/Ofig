@@ -1,38 +1,36 @@
 <%- include ('partials/header') %>
-  <!-- Page Content -->
+
   <div class="container container-main">
 
     <div class="row">
 
       <%- include ('partials/leftMenu') %>
-    
-      <!-- /.col-lg-3 -->
 
       <div class="col-lg-9">
 
         <div class="row">
         
           <div class="col-lg-6">
-            <img class="" src="../images/<%= oneFigurine.name.toLowerCase() %>.png" alt="">
+            <img class="" src="../images/<%= figurine.name.toLowerCase() %>.png" alt="">
           </div>
 
           <div class="col-lg-6">
             <div class="card">
               <div class="card-body">
                   <h3 class="card-title">
-                    <%= oneFigurine.name %>
-                    <div class="badge badge-pill badge-<%= oneFigurine.category.toLowerCase() %>"><%= oneFigurine.category %></div>
+                    <%= figurine.name %>
+                    <div class="badge badge-pill badge-<%= figurine.category.toLowerCase() %>"><%= figurine.category %></div>
                   </h3>
-                  <p class="card-text">Taille réelle : <%= oneFigurine.size %>cm</p>
-                  <p class="card-text"><%= oneFigurine.description %></p>
+                  <p class="card-text">Taille réelle : <%= figurine.size %>cm</p>
+                  <p class="card-text"><%= figurine.description %></p>
                   <p class="card-text"><%= reviews.length %>
-                    Note moyenne : <%- '&#9733;'.repeat(Math.round(oneFigurine.note)) %><%- '&#9734;'.repeat(5 - Math.round(oneFigurine.note)) %>
+                    Note moyenne : <%- '&#9733;'.repeat(Math.round(figurine.note)) %><%- '&#9734;'.repeat(5 - Math.round(figurine.note)) %>
                     <br>
                     <a href="#" data-toggle="modal" data-target="#reviewsModal">Détails des avis</a>
                   </p>
-                  <h5><%= oneFigurine.price %>€</h5>
+                  <h5><%= figurine.price %>€</h5>
                   <p class="card-text">
-                    <a href="/bookmarks/add/<%= oneFigurine.id %>" class="link-add-bookmarks">+ Ajouter aux favoris</a>
+                    <a href="/bookmarks/add/<%= figurine.id %>" class="link-add-bookmarks">+ Ajouter aux favoris</a>
                   </p>
               </div>
             </div>
@@ -40,16 +38,12 @@
           </div>
 
         </div>
-        <!-- /.row -->
 
       </div>
-      <!-- /.col-lg-9 -->
 
     </div>
-    <!-- /.row -->
 
   </div>
-  <!-- /.container -->
 
   <!-- Modale des avis -->
   <div class="modal fade" id="reviewsModal" tabindex="-1" role="dialog" aria-labelledby="reviewsModalLabel" aria-hidden="true">
