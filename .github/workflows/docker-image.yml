@@ -19,18 +19,18 @@ jobs:
 
     - name: Build and bring up services with Docker Compose
       run: |
-        docker-compose -f docker-compose.prod.yml build
-        docker-compose -f docker-compose.prod.yml up -d --wait
+        docker compose -f docker-compose.prod.yml build
+        docker compose -f docker-compose.prod.yml up -d --wait
 
     - name: Install dependencies in main service for Biome/Jest
-      run: docker-compose -f docker-compose.prod.yml exec ofig-main-prod npm install
+      run: docker compose -f docker-compose.prod.yml exec ofig-main-prod npm install
 
     - name: Run Biome checks (format and lint)
-      run: docker-compose -f docker-compose.prod.yml exec ofig-main-prod npm run check
+      run: docker compose -f docker-compose.prod.yml exec ofig-main-prod npm run check
       
     - name: Run Jest tests
-      run: docker-compose -f docker-compose.prod.yml exec ofig-main-prod npm test
+      run: docker compose -f docker-compose.prod.yml exec ofig-main-prod npm test
 
     - name: Clean up Docker Compose services
       if: always()
-      run: docker-compose -f docker-compose.prod.yml down
+      run: docker compose -f docker-compose.prod.yml down
