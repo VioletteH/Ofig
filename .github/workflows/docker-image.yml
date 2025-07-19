@@ -19,6 +19,9 @@ jobs:
 
     - name: Build and bring up services with Docker Compose
       run: |
+        set -a
+        source ./docker.env.prod
+        set +a
         docker compose -f docker-compose.prod.yml build
         docker compose -f docker-compose.prod.yml up -d --wait
 
