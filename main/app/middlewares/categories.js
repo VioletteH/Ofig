@@ -1,9 +1,8 @@
 import figurineDataMapper from "../models/figurineDataMapper.js";
 
-async function categoriesMW(
-	// biome-ignore lint/correctness/noUnusedVariables: 'req' est un paramètre standard des middlewares Express, même s'il n'est pas utilisé ici.
-	req, res, next) {
+async function categoriesMW(_req, res, next) {
 	try {
+		void _req;
 		res.locals.categories = await figurineDataMapper.countCategory();
 		next();
 	} catch (error) {

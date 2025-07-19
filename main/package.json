@@ -6,7 +6,7 @@
 	"scripts": {
 		"start": "node index.js",
 		"dev": "node --watch index.js",
-    "test:reset": "docker compose -f docker-compose.prod.yml exec ofig-db-prod psql -U $POSTGRES_USER -d $POSTGRES_DB -f /docker-entrypoint-initdb.d/init.sql",
+		"test:reset": "docker compose -f docker-compose.prod.yml exec ofig-db-prod psql -U $POSTGRES_USER -d $POSTGRES_DB -f /docker-entrypoint-initdb.d/init.sql",
 		"pretest": "npm run test:reset",
 		"test": "jest",
 		"format": "npx biome format .",

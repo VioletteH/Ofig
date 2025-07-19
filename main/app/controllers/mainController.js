@@ -1,9 +1,9 @@
 import figurineDataMapper from "../models/figurineDataMapper.js";
 
 const mainController = {
-	async homePage(request, response, next) {
-		// biome-ignore lint/correctness/noUnusedVariables: 'next' est un paramètre standard des contrôleurs Express, même s'il n'est pas utilisé ici.
+	async homePage(_request, response, _next) {
 		try {
+			void _request;
 			const figurines = await figurineDataMapper.getAllFigurines();
 			response.render("accueil", { figurines });
 		} catch (error) {
