@@ -1,0 +1,33 @@
+services:
+
+  ofig-main:
+    container_name: ofig-main
+    build:
+      context: ./main 
+      dockerfile: Dockerfile 
+    ports:
+      - "3000:3000"
+    env_file:
+      - ./docker.env
+    volumes:
+      - ./main:/app
+      - /app/node_modules
+    depends_on:
+      - ofig-db
+
+  ofig-db:
+    container_name: ofig-db
+    image: postgres:latest
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+    env_file:
+      - ./docker.env
+    volumes:
+       - ./data/create_db.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $POSTGRES_USER -d $POSTGRES_DB"]
+      start_period: 15s
+      interval: 15s
+      timeout: 5s
+      retries: 5

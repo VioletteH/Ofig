@@ -1,0 +1,13 @@
+{
+  "presets": [
+    ["@babel/preset-env", {
+      "targets": {
+        "node": "current"
+      },
+      "modules": "commonjs" // C'est crucial pour forcer le CommonJS
+    }]
+  ],
+  "plugins": [
+    "babel-plugin-transform-import-meta" // On le garde au cas où d'autres fichiers l'utiliseraient
+  ]
+}

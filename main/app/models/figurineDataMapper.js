@@ -6,6 +6,7 @@ const figurineDataMapper = {
             SELECT figurine.*, AVG(note) as note 
             FROM figurine LEFT JOIN review ON (review.figurine_id = figurine.id)
             GROUP BY figurine.id;`);
+        console.log(result.rows);
         return result.rows;    
     },
 

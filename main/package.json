@@ -1,0 +1,33 @@
+{
+  "name": "s08e02-ofig-server-violetteh",
+  "version": "1.0.0",
+  "description": "## Étape 1: Mise en place",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node --watch index.js",
+    "test:reset": "dotenv -e .env.test -- psql -U \"$DB_USER\" -d \"$DB_NAME\" -f ../data/create_db.sql",
+    "pretest": "npm run test:reset",
+    "test": "jest"
+  },
+  "type": "module",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "ejs": "^3.1.10",
+    "express": "^4.21.1",
+    "express-session": "^1.18.1",
+    "pg": "^8.13.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.28.0",
+    "@babel/preset-env": "^7.28.0",
+    "babel-jest": "^30.0.4",
+    "babel-plugin-transform-import-meta": "^2.3.3",
+    "dotenv-cli": "^8.0.0",
+    "jest": "^30.0.4",
+    "supertest": "^7.1.3"
+  }
+}

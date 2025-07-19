@@ -61,6 +61,10 @@ const bookmarksController = {
       };
 
       // VERSION CORRIGEE
+      // const figurine = await figurineDataMapper.getOneFigurine(figurineId);
+      // if (!figurine) {
+      //   return response.redirect('/bookmarks');
+      // }
       // request.session.bookmarks = request.session.bookmarks.filter(figurine => figurine.id !== figurineToDeleteId);
       
       response.redirect('/bookmarks');
