@@ -18,25 +18,18 @@ jobs:
       uses: docker/setup-buildx-action@v3
 
     # --- Phase de Test ---
-    # Charge les variables d'environnement de .env.test pour docker-compose.test.yml
-    - name: Load .env.test variables
-      run: |
-        set -a # Active l'exportation automatique des variables
-        source .env.test
-        set +a # Désactive l'exportation
+    # La variable d'environnement NODE_ENV est utilisée par docker-compose.test.yml
+    # pour le service ofig-main-test, et aussi par tes scripts/code si tu l'utilises.
+    # C'est une bonne pratique de la définir ici.
+    - name: Set NODE_ENV for tests
+      run: echo "NODE_ENV=test" >> $GITHUB_ENV
 
     - name: Build and Run Test Services
       # Utilise docker-compose.test.yml pour construire les images et lancer les services.
       # La commande 'npm test' est intégrée au service 'ofig-main-test'.
       # '--abort-on-container-exit' assure que le pipeline s'arrête si les tests échouent.
-      run: docker compose -f docker-compose.test.yml up --build --abort-on-container-exit
-
-    # Les étapes Biome peuvent être exécutées séparément si tu le souhaites,
-    # ou intégrées dans le conteneur de test si c'est plus simple.
-    # Pour l'instant, je les garde séparées mais adaptées pour le conteneur de dev/prod si tu ne veux pas les dupliquer
-    # Si tu veux que Biome s'exécute sur l'environnement de test, tu devrais modifier 'ofig-main-test' pour cela.
-    # Ou bien, tu peux avoir une étape 'build-only' pour ofig-main, puis exec Biome.
-    # Pour l'exemple, je vais les exécuter sur le service de dev/prod pour la cohérence de tes fichiers.
+      # NOUVEAU : Utilise --env-file pour charger .env.test
+      run: docker compose -f docker-compose.test.yml --env-file .env.test up --build --abort-on-container-exit
 
     # --- Phase Biome (peut être déplacée dans un job séparé si les tests sont critiques avant Biome) ---
     - name: Build Main service for Biome checks (using dev config)
@@ -47,7 +40,6 @@ jobs:
         docker compose -f docker-compose.yml build ofig-main # Juste le build pour Biome
 
     - name: Run Biome checks (format and lint)
-      # Lance un conteneur temporaire pour Biome, sans lancer toute l'application
       run: |
         docker run --rm \
           -v "$(pwd)/main:/app" \
