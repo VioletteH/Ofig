@@ -1,3 +1,4 @@
+# workflow.yml (simplifié)
 name: CI/CD Pipeline with Docker Compose and Jest
 
 on:
@@ -18,40 +19,35 @@ jobs:
       uses: docker/setup-buildx-action@v3
 
     # --- Phase de Test ---
-    # La variable d'environnement NODE_ENV est utilisée par docker-compose.test.yml
-    # pour le service ofig-main-test, et aussi par tes scripts/code si tu l'utilises.
-    # C'est une bonne pratique de la définir ici.
     - name: Set NODE_ENV for tests
       run: echo "NODE_ENV=test" >> $GITHUB_ENV
 
-    - name: Build and Run Test Services
+    - name: Build and Run Test Services (with Biome and Jest)
       # Utilise docker-compose.test.yml pour construire les images et lancer les services.
-      # La commande 'npm test' est intégrée au service 'ofig-main-test'.
+      # La commande 'npm run check && npm test' est intégrée au service 'ofig-main-test'.
       # '--abort-on-container-exit' assure que le pipeline s'arrête si les tests échouent.
-      # NOUVEAU : Utilise --env-file pour charger .env.test
       run: docker compose -f docker-compose.test.yml --env-file .env.test up --build --abort-on-container-exit
-
-    # --- Phase Biome (peut être déplacée dans un job séparé si les tests sont critiques avant Biome) ---
-    - name: Build Main service for Biome checks (using dev config)
-      run: |
-        set -a
-        source ./docker.env # Utilise docker.env pour le build dev
-        set +a
-        docker compose -f docker-compose.yml build ofig-main # Juste le build pour Biome
-
-    - name: Run Biome checks (format and lint)
-      run: |
-        docker run --rm \
-          -v "$(pwd)/main:/app" \
-          -v "/app/node_modules" \
-          ofig-main:latest \
-          npm run check
 
     # --- Nettoyage ---
     - name: Clean up Test Docker Compose services
       if: always() # S'exécute même si les étapes précédentes échouent
       run: docker compose -f docker-compose.test.yml down
 
-    - name: Clean up Dev Docker Compose services (if built for Biome)
-      if: always()
-      run: docker compose -f docker-compose.yml down ofig-main # Nettoie juste le conteneur Biome si créé
+    # Tu peux supprimer ces étapes si Biome est maintenant intégré aux tests
+    # Ou les garder si tu veux une étape Biome séparée pour le build de dev/prod
+    # - name: Build Main service for Biome checks (using dev config)
+    #   run: |
+    #     set -a
+    #     source ./docker.env
+    #     set +a
+    #     docker compose -f docker-compose.yml build ofig-main
+    # - name: Run Biome checks (format and lint)
+    #   run: |
+    #     docker run --rm \
+    #       -v "$(pwd)/main:/app" \
+    #       -v "/app/node_modules" \
+    #       ofig-main:latest \
+    #       npm run check
+    # - name: Clean up Dev Docker Compose services (if built for Biome)
+    #   if: always()
+    #   run: docker compose -f docker-compose.yml down ofig-main

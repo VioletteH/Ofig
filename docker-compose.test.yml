@@ -1,3 +1,4 @@
+# docker-compose.test.yml
 version: '3.8'
 services:
   ofig-main-test:
@@ -15,12 +16,13 @@ services:
       DB_NAME: ${POSTGRES_DB_TEST}
     volumes:
       - ./main:/app
-      - /app/node_modules 
+      - /app/node_modules
     depends_on:
       ofig-db-test:
-        condition: service_healthy 
-    command: ["npm", "test"]
-
+        condition: service_healthy
+    # NOUVEAU: Exécute Biome, puis les tests
+    command: ["/bin/sh", "-c", "npm run check && npm test"] # Exécute 'npm run check', puis 'npm test'
+                                                           # Le '&&' s'assure que 'npm test' ne s'exécute que si 'npm run check' réussit.
   ofig-db-test:
     container_name: ofig-db-test
     image: postgres:latest
