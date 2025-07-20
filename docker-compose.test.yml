@@ -1,0 +1,38 @@
+version: '3.8'
+services:
+  ofig-main-test:
+    container_name: ofig-main-test
+    build:
+      context: ./main
+      dockerfile: Dockerfile
+    environment:
+      NODE_ENV: test
+      PG_URL: postgres://${POSTGRES_USER_TEST}:${POSTGRES_PASSWORD_TEST}@ofig-db-test:5432/${POSTGRES_DB_TEST}
+      DB_HOST: ofig-db-test
+      DB_PORT: 5432
+      DB_USER: ${POSTGRES_USER_TEST}
+      DB_PASSWORD: ${POSTGRES_PASSWORD_TEST}
+      DB_NAME: ${POSTGRES_DB_TEST}
+    volumes:
+      - ./main:/app
+      - /app/node_modules 
+    depends_on:
+      ofig-db-test:
+        condition: service_healthy 
+    command: ["npm", "test"]
+
+  ofig-db-test:
+    container_name: ofig-db-test
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB_TEST}
+      POSTGRES_USER: ${POSTGRES_USER_TEST}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD_TEST}
+    volumes:
+       - ./data/create_db.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $POSTGRES_USER -d $POSTGRES_DB"]
+      start_period: 15s
+      interval: 15s
+      timeout: 5s
+      retries: 5
