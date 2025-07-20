@@ -30,9 +30,22 @@ jobs:
 
     - name: Run Biome checks (format and lint)
       run: docker compose -f docker-compose.prod.yml exec ofig-main-prod npm run check
-      
+    
+    - name: Export DB env vars from .env.test
+      run: |
+        set -a
+        source .env.test
+        set +a
+        echo "DB_USER=$DB_USER" >> $GITHUB_ENV
+        echo "DB_NAME=$DB_NAME" >> $GITHUB_ENV
+        echo "DB_PASSWORD=$DB_PASSWORD" >> $GITHUB_ENV
+
     - name: Run SQL init script before tests
-      run: docker compose -f docker-compose.prod.yml exec ofig-db-prod psql -U "$DB_USER" -d "$DB_NAME" -f /docker-entrypoint-initdb.d/init.sql
+      run: |
+        docker compose -f docker-compose.prod.yml exec \
+          -e PGPASSWORD=$DB_PASSWORD \
+          ofig-db-prod \
+          psql -U $DB_USER -d $DB_NAME -f /docker-entrypoint-initdb.d/init.sql
 
     - name: Run Jest tests
       run: docker compose -f docker-compose.prod.yml exec ofig-main-prod npm test
