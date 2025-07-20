@@ -31,6 +31,9 @@ jobs:
     - name: Run Biome checks (format and lint)
       run: docker compose -f docker-compose.prod.yml exec ofig-main-prod npm run check
       
+    - name: Run SQL init script before tests
+      run: docker compose -f docker-compose.prod.yml exec ofig-db-prod psql -U "$DB_USER" -d "$DB_NAME" -f /docker-entrypoint-initdb.d/init.sql
+
     - name: Run Jest tests
       run: docker compose -f docker-compose.prod.yml exec ofig-main-prod npm test
 
